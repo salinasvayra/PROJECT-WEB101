@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEB101 Website</title>
+
+    <style>
+      
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: white;
+            transition: 0.3s;
+        }
+
+        header {
+            background-color: #000;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+      
+        #modeToggle {
+            background: #222;
+            color: white;
+            border: 1px solid #555;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        #modeToggle:hover {
+            background: #333;
+        }
+
+        nav a {
+            color: #ccc;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        nav a:hover,
+        nav a.active {
+            color: white;
+        }
+
+        .page {
+            display: none;
+            padding: 50px;
+            max-width: 900px;
+            margin: auto;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        .show {
+            display: block;
+        }
+
+       
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            animation: slideUp 0.7s ease-in-out;
+        }
+        .hero h2 {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 18px;
+            color: #ccc;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .card {
+            width: 260px;
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.3s;
+            cursor: pointer;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        .card:hover {
+            transform: scale(1.07) rotate(1deg);
+            background: #222;
+            box-shadow: 0 0 20px #00aaff;
+        }
+        .card img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* MEMBERS SECTION: list on left, info on right */
+        #members .members-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        #members .member-list {
+            flex: 0 0 220px; /* fixed width for list */
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #members .member-list li {
+            background: #222;
+            padding: 15px;
+            margin: 8px 0;
+            border: 1px solid #444;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        #members .member-list li:hover {
+            background: #333;
+            transform: translateX(5px);
+        }
+
+        #members .profile-box {
+            flex: 1; 
+            background: #222;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #444;
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .profile-container {
+            display: flex;
+            gap: 20px;
+        }
+        .profile-pic {
+            width: 180px;
+            height: 180px;
+            background: #333;
+            border: 2px solid #555;
+            border-radius: 10px;
+        }
+        .profile-details {
+            flex: 1;
+        }
+
+        footer {
+            background-color: #000;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+            border-top: 2px solid #444;
+        }
+
+        /* LIGHT MODE */
+        body.light {
+            background: #f2f2f2;
+            color: #000;
+        }
+        body.light header {
+            background: #fff;
+            border-bottom: 2px solid #ccc;
+        }
+        body.light footer {
+            background: #fff;
+            border-top: 2px solid #ccc;
+        }
+        body.light nav a {
+            color: #444;
+        }
+        body.light nav a.active {
+            color: #000;
+        }
+        body.light .card {
+            background: #fff;
+            border: 1px solid #bbb;
+        }
+        body.light #members .member-list li,
+        body.light #members .profile-box {
+            background: #fff;
+            border: 1px solid #bbb;
+        }
+        body.light #members .profile-pic {
+            background: #e1e1e1;
+            border-color: #bbb;
+        }
+        body.light #modeToggle {
+            background: #ddd;
+            color: #000;
+            border-color: #aaa;
+        }
+    </style>
+
+    <script>
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('show'));
+            document.getElementById(page).classList.add('show');
+            document.querySelectorAll("nav a").forEach(a => a.classList.remove("active"));
+            document.getElementById(page + "-btn").classList.add("active");
+        }
+
+   
+        function toggleMode() {
+            document.body.classList.toggle("light");
+            document.getElementById("modeToggle").innerText =
+                document.body.classList.contains("light") ? "Dark Mode" : "Light Mode";
+        }
+
+        const profiles = {
+            member1: {
+                name: "Cristine Joy A. De Guzman",
+                age: "19",
+                Bday: "February 17, 2006",
+                address: "Bagong Silang, Caloocan City",
+                contactnumber: "09099659738",
+                course: "BSIT",
+                hobbies: "Gaming, Drawing",
+                motto: "Enjoy every moment while it lasts."
+            },
+            member2: {
+                name: "Joyce D. Balaba",
+                age: "21",
+                Bday: "November 29, 2003",
+                address: "Commonwealth, Quezon City",
+                contactnumber: "09306791542",
+                course: "BSIT",
+                hobbies: "Reading",
+                motto: "Be the change you want to see."
+            },
+            member3: {
+                name: "Bea H. Manalaysay",
+                age: "19",
+                Bday: "June 30, 2006",
+                address: "34c Howmart Rd. Baesa Quezon city",
+                contactnumber: "09541930060",
+                course: "BSIT",
+                hobbies: "Playing Badminton",
+                motto: "Ang life parang buhay."
+            },
+            member4: {
+                name: "Jameson M. Riño",
+                age: "20",
+                Bday: "December 1, 2004",
+                address: "Batasan Hills, Quezon city",
+                contactnumber: "09382295075",
+                course: "BSIT",
+                hobbies: "Doing nothing",
+                motto: "Do your best, but maybe not sometimes."
+            },
+            member5: {
+                name: "Jovaira S. Andagon",
+                age: "20",
+                Bday: "May 24, 2005",
+                address: "Zabarte Rd constellation Home, Caloocan City",
+                contactnumber: "09260939839",
+                course: "BSIT",
+                hobbies: "Editing",
+                motto: "The best is yet to come, keep pushing."
+            },
+            member6: {
+                name: "Dean Angelo A. Ocao",
+                age: "19",
+                Bday: "February 18, 2006",
+                address: "San Isidro, Rodriguez, Rizal",
+                contactnumber: "09303463873",
+                course: "BSIT",
+                hobbies: "Playing online games",
+                motto: "Life is short, make it shorter."
+            },
+            member7: {
+                name: "John Benedict S. Insilada",
+                age: "19",
+                Bday: "August 13, 2006",
+                address: "Commonwealth, Quezon City",
+                contactnumber: "09278605357",
+                course: "BSIT",
+                hobbies: "Playing badminton, games and sleeping",
+                motto: "If not now, then ano next?"
+            },
+        };
+
+        function showProfile(memberID) {
+            const p = profiles[memberID];
+            const box = document.getElementById("profile-box");
+            box.style.display = "block";
+            box.innerHTML = `
+                <div class="profile-container">
+                    <div class="profile-pic"></div>
+                    <div class="profile-details">
+                        <h3>${p.name}</h3>
+                        <p><strong>Age:</strong> ${p.age}</p>
+                        <p><strong>Course:</strong> ${p.course}</p>
+                        <p><strong>Address:</strong> "${p.address}"</p>
+                        <p><strong>Contactnumber:</strong> "${p.contactnumber}"</p>
+                        <p><strong>Hobbies:</strong> ${p.hobbies}</p>
+                        <p><strong>Motto:</strong> "${p.motto}"</p>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</head>
+
+<body onload="showPage('home')">
+
+<header>
+    <h1>WEB101 Website</h1>
+
+    <button id="modeToggle" onclick="toggleMode()">Light Mode</button>
+
+    <nav>
+        <a id="home-btn" class="active" onclick="showPage('home')">Home</a>
+        <a id="about-btn" onclick="showPage('about')">About</a>
+        <a id="members-btn" onclick="showPage('members')">Members</a>
+    </nav>
+</header>
+
+<section id="home" class="page">
+    <div class="hero">
+        <h2>Welcome to WEB101</h2>
+        <p>Learn HTML • CSS • Interactivity • Web Design</p>
+
+        <div class="cards">
+            <div class="card">
+                <img src="https://i.imgur.com/7yUvePI.png" alt="HTML Icon">
+                <h3>Learn HTML</h3>
+                <p>Structure your webpage using tags and semantic elements.</p>
+            </div>
+
+            <div class="card">
+                <img src="https://i.imgur.com/0bZQZ7v.png" alt="CSS Icon">
+                <h3>Style with CSS</h3>
+                <p>Design beautiful layouts and responsive components.</p>
+            </div>
+
+            <div class="card">
+                <img src="https://i.imgur.com/17o9XvX.png" alt="JS Icon">
+                <h3>Add Interactivity</h3>
+                <p>Bring your website to life using JavaScript.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="page">
+    <h2>About WEB101</h2>
+    <p>WEB101 introduces students to the fundamentals of HTML, CSS, and basic web design.</p>
+</section>
+
+<section id="members" class="page">
+    <h2>Group Members</h2>
+    <div class="members-container">
+        <ul class="member-list">
+            <li onclick="showProfile('member1')">Member 1</li>
+            <li onclick="showProfile('member2')">Member 2</li>
+            <li onclick="showProfile('member3')">Member 3</li>
+            <li onclick="showProfile('member4')">Member 4</li>
+            <li onclick="showProfile('member5')">Member 5</li>
+            <li onclick="showProfile('member6')">Member 6</li>
+            <li onclick="showProfile('member7')">Member 7</li>
+        </ul>
+
+        <div id="profile-box" class="profile-box"></div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2025 WEB101 Project</p>
+</footer>
+
+</body>
+</html>
